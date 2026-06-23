@@ -471,7 +471,7 @@ burger?.addEventListener('click', () => {
         text:    { es: 'Software de realidad mixta para MiesGroup. Coloca y manipula modelos 3D sobre el mundo real desde el navegador del móvil, sin apps ni instalación, con solo un enlace. Construido con WebXR y Three.js.',
                    en: 'Mixed-reality software for MiesGroup. Place and manipulate 3D models over the real world from your mobile browser — no app, no install, just a link. Built with WebXR and Three.js.' },
         sub:     { es: 'Realidad mixta · WebXR', en: 'Mixed reality · WebXR' },
-        cta:     { es: 'Ver demo', en: 'View demo' },
+        cta:     { es: 'Ir al sitio web', en: 'Go to website' },
         media:   'url("assets/Software/MiesAR/MiesAR_Card.jpg")',
         bg:      BG.miesar,
         accent:  '#2fb37a',
