@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=46" />
+  <link rel="stylesheet" href="styles.css?v=47" />
 </head>
 <body>
   <!-- PRELOADER -->
@@ -145,14 +145,30 @@
       <div class="show__detail" aria-hidden="true"></div>
     </section>
 
-    <section class="view" data-view="estudio">
-      <span class="view__eyebrow" data-es="ESTUDIO" data-en="STUDIO">ESTUDIO</span>
-      <h2 class="view__title" data-es="Estudio" data-en="Studio">Estudio</h2>
-      <p class="view__text" data-es="Quiénes somos en NIPHOS. Sección en construcción." data-en="Who we are at NIPHOS. Section under construction.">Quiénes somos en NIPHOS. Sección en construcción.</p>
-      <button class="view__back" type="button" aria-label="Volver" data-es-aria="Volver" data-en-aria="Back">
+    <section class="view view--studio" data-view="estudio">
+      <button class="view__back show__back" type="button" aria-label="Volver" data-es-aria="Volver" data-en-aria="Back">
         <span class="view__back-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
         <span class="view__back-txt" data-es="Volver" data-en="Back">Volver</span>
       </button>
+
+      <div class="studio">
+        <span class="view__eyebrow" data-es="ESTUDIO" data-en="STUDIO">ESTUDIO</span>
+        <h2 class="view__title" data-es="Quiénes somos" data-en="Who we are">Quiénes somos</h2>
+        <p class="view__text" data-es="En NIPHOS construimos mundos, reales y virtuales. Un estudio que une software, recorridos inmersivos y videojuegos bajo una misma visión." data-en="At NIPHOS we build worlds, real and virtual. A studio uniting software, immersive tours and games under one vision.">En NIPHOS construimos mundos, reales y virtuales. Un estudio que une software, recorridos inmersivos y videojuegos bajo una misma visión.</p>
+
+        <div class="team">
+          <article class="member">
+            <div class="member__photo">
+              <img src="assets/Games/Contacto/Foto.jpeg" alt="Jeremy Higuita Salazar" />
+            </div>
+            <div class="member__body">
+              <h3 class="member__name">Jeremy Higuita Salazar</h3>
+              <span class="member__role" data-es="CEO · Cofundador" data-en="CEO · Co-founder">CEO · Cofundador</span>
+              <p class="member__meta" data-es="Ingeniero en Sistemas — Universidad de Manizales · 22 años" data-en="Systems Engineer — University of Manizales · 22 years old">Ingeniero en Sistemas — Universidad de Manizales · 22 años</p>
+            </div>
+          </article>
+        </div>
+      </div>
     </section>
 
     <section class="view" data-view="contacto">

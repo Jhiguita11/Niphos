@@ -1597,6 +1597,75 @@ body.returning .lang { animation: orbitIn 0.8s var(--ease) 0.25s both; }
   .show__arrow-ic { width: 30px; }
 }
 
+/* ===== Estudio: perfil del equipo ===== */
+.view--studio { --vc: var(--accent); }
+.studio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 720px;
+}
+.studio .view__text { margin-bottom: 44px; }
+
+.team { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
+.member {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  text-align: left;
+  padding: 18px 26px 18px 18px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: border-color 0.4s var(--ease), transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+.member:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--vc) 55%, transparent);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45);
+}
+.member__photo {
+  flex: 0 0 auto;
+  width: clamp(96px, 12vw, 130px);
+  height: clamp(96px, 12vw, 130px);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--vc) 40%, transparent);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--vc) 30%, transparent);
+}
+.member__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.member__body { display: flex; flex-direction: column; gap: 5px; }
+.member__name {
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  line-height: 1.1;
+}
+.member__role {
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--vc);
+}
+.member__meta {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--fg-dim);
+  font-weight: 300;
+  max-width: 320px;
+}
+.view.active .member { animation: viewUp 0.8s var(--ease) 0.4s both; }
+
+@media (max-width: 560px) {
+  .member { flex-direction: column; text-align: center; align-items: center; padding: 22px; }
+  .member__body { align-items: center; }
+  .member__meta { max-width: 280px; }
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 820px) {
   .burger { display: flex; }
