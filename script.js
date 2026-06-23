@@ -417,7 +417,7 @@ burger?.addEventListener('click', () => {
         logo:    'assets/Software/Nexarq/NexarqLogo.png',
         bg:      BG.nexarq,
         accent:  '#e0b860',
-        site:    '#',   // TODO: URL del sitio web de Nexarq 360
+        site:    'https://www.nexarq360.com',
         children: [
           {
             title:   { es: 'Valle Alto', en: 'Valle Alto' },
