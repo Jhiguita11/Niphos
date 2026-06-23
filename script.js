@@ -162,6 +162,11 @@ burger?.addEventListener('click', () => {
       const val = el.getAttribute('data-' + lang + '-aria');
       if (val !== null) el.setAttribute('aria-label', val);
     });
+    // placeholders (inputs/textarea) marcados con data-es-ph / data-en-ph
+    document.querySelectorAll('[data-es-ph]').forEach((el) => {
+      const val = el.getAttribute('data-' + lang + '-ph');
+      if (val !== null) el.setAttribute('placeholder', val);
+    });
     // estado del botón
     btns.forEach((b) => {
       const active = b.dataset.lang === lang;
@@ -821,6 +826,50 @@ burger?.addEventListener('click', () => {
     window.addEventListener('niphos:lang', render);
     build();
     render();
+  });
+})();
+
+/* ---- 8. Formulario de contacto (envío AJAX a Formspree) ---- */
+(() => {
+  const form = document.querySelector('.contact__form');
+  if (!form) return;
+  const lng = () => (document.documentElement.lang === 'en' ? 'en' : 'es');
+
+  const status = document.createElement('p');
+  status.className = 'cform__status';
+  status.setAttribute('role', 'status');
+  form.appendChild(status);
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const action = form.getAttribute('action') || '';
+    if (action.includes('XXXX') || !action.startsWith('http')) {
+      status.className = 'cform__status is-error';
+      status.textContent = lng() === 'en'
+        ? 'Form not configured yet.'
+        : 'El formulario aún no está configurado.';
+      return;
+    }
+    status.className = 'cform__status';
+    status.textContent = lng() === 'en' ? 'Sending…' : 'Enviando…';
+    try {
+      const res = await fetch(action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+      if (!res.ok) throw new Error('bad response');
+      form.reset();
+      status.className = 'cform__status is-ok';
+      status.textContent = lng() === 'en'
+        ? 'Thanks! We will get back to you soon.'
+        : '¡Gracias! Te responderemos pronto.';
+    } catch (err) {
+      status.className = 'cform__status is-error';
+      status.textContent = lng() === 'en'
+        ? 'Something went wrong. Please try again.'
+        : 'Algo salió mal. Inténtalo de nuevo.';
+    }
   });
 })();
 
