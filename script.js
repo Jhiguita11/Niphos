@@ -793,9 +793,30 @@ burger?.addEventListener('click', () => {
 
     document.addEventListener('keydown', (e) => {
       if (!view.classList.contains('active')) return;
+      if (view.classList.contains('is-soon')) return;
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); go(1); }
       else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); go(-1); }
     });
+
+    // Videojuegos: cortina "Próximamente" sobre el contenido difuminado
+    if (view.dataset.view === 'videojuegos') {
+      view.classList.add('is-soon');
+      const soon = document.createElement('div');
+      soon.className = 'coming';
+      soon.innerHTML =
+        '<span class="coming__eyebrow">NIPHOS STUDIO</span>'
+        + '<h2 class="coming__title" data-es="Próximamente" data-en="Coming soon">Próximamente</h2>'
+        + '<span class="coming__line" aria-hidden="true"></span>'
+        + '<p class="coming__text" data-es="Estamos construyendo mundos. Nuestros videojuegos llegarán muy pronto."'
+        + ' data-en="We are building worlds. Our games are coming very soon.">'
+        + 'Estamos construyendo mundos. Nuestros videojuegos llegarán muy pronto.</p>';
+      view.appendChild(soon);
+      // aplica el idioma actual a los nodos recién creados
+      soon.querySelectorAll('[data-es]').forEach((el) => {
+        const v = el.getAttribute('data-' + lang());
+        if (v !== null) el.textContent = v;
+      });
+    }
 
     window.addEventListener('niphos:lang', render);
     build();

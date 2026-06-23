@@ -924,7 +924,68 @@ body.returning .lang { animation: orbitIn 0.8s var(--ease) 0.25s both; }
   position: absolute;
   top: clamp(20px, 4vh, 36px);
   left: clamp(24px, 6vw, 80px);
-  z-index: 4;
+  z-index: 7;
+}
+
+/* ===== Cortina "Próximamente" (Videojuegos) ===== */
+.coming {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 22px;
+  padding: 40px;
+  background: radial-gradient(ellipse at center, rgba(12, 7, 22, 0.32), rgba(6, 5, 12, 0.62));
+  -webkit-backdrop-filter: blur(20px) saturate(1.1);
+  backdrop-filter: blur(20px) saturate(1.1);
+}
+.coming__eyebrow {
+  font-family: 'Sora', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  color: var(--vc);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--vc) 60%, transparent);
+}
+.coming__title {
+  font-family: 'Sora', sans-serif;
+  font-weight: 300;
+  font-size: clamp(2.6rem, 9vw, 6rem);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  background: linear-gradient(120deg, #ffffff, color-mix(in srgb, var(--vc) 75%, #ffffff) 52%, #ffffff);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: comingShimmer 6s ease-in-out infinite;
+}
+@keyframes comingShimmer {
+  0%, 100% { background-position: 0% center; }
+  50%      { background-position: 120% center; }
+}
+.coming__line {
+  width: 70px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--vc);
+  box-shadow: 0 0 14px var(--vc);
+  animation: comingPulse 2.6s ease-in-out infinite;
+}
+@keyframes comingPulse {
+  0%, 100% { opacity: 0.5; width: 56px; }
+  50%      { opacity: 1;   width: 92px; }
+}
+.coming__text {
+  max-width: 430px;
+  color: var(--fg-dim);
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  line-height: 1.7;
+  font-weight: 300;
 }
 
 /* bloque de texto, abajo a la izquierda */
