@@ -1479,7 +1479,8 @@ body.returning .lang { animation: orbitIn 0.8s var(--ease) 0.25s both; }
   .detail__text { font-size: 0.94rem; line-height: 1.6; }
 
   .detail__item-name { font-size: 1.05rem; }
-  .detail__eyebrow img { height: clamp(80px, 20vw, 120px); margin-left: 0; }
+  .detail__eyebrow { text-align: center; }
+  .detail__eyebrow img { height: clamp(80px, 20vw, 120px); margin: 0 auto; }
   .detail__eyebrow:has(img)::before { left: 50%; }
 }
 
