@@ -1404,6 +1404,13 @@ body.returning .lang { animation: orbitIn 0.8s var(--ease) 0.25s both; }
   font-size: clamp(1.6rem, 3.4vw, 2.7rem);
   line-height: 1;
 }
+.detail__title img {
+  display: block;
+  height: clamp(64px, 8vw, 110px);
+  width: auto;
+  max-width: 100%;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.65));
+}
 .detail__text {
   color: var(--fg-dim);
   font-size: clamp(0.95rem, 1.2vw, 1.05rem);
@@ -1468,6 +1475,7 @@ body.returning .lang { animation: orbitIn 0.8s var(--ease) 0.25s both; }
     gap: 10px;
   }
   .detail__title { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+  .detail__title img { height: clamp(56px, 16vw, 84px); }
   .detail__text { font-size: 0.94rem; line-height: 1.6; }
 
   .detail__item-name { font-size: 1.05rem; }

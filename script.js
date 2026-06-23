@@ -427,6 +427,7 @@ burger?.addEventListener('click', () => {
             sub:     { es: 'Recorrido 360°', en: '360° tour' },
             media:   'linear-gradient(160deg,#2e6f6b,#0c2b2e)',
             preview: 'url("assets/Software/Nexarq/Valle_Alto_Portada.jpg")',
+            logo:    'assets/Software/Nexarq/LogoValleAltoSinFondo.png',
             bg:      BG.tour,
             accent:  '#7ac4c6',
             url:     'https://jhiguita11.github.io/NEXARQ/',
@@ -439,6 +440,7 @@ burger?.addEventListener('click', () => {
             sub:     { es: 'Recorrido 360°', en: '360° tour' },
             media:   'linear-gradient(160deg,#3a7d8a,#0f2330)',
             preview: 'url("assets/Software/Nexarq/ReservaDeMirrinao_Portada.jpg")',
+            logo:    'assets/Software/Nexarq/Logo%20vertical%20RSDM.png',
             bg:      BG.reserva,
             accent:  '#6aa6c8',
             url:     'https://jhiguita11.github.io/Reserva_Mirrinao/',
@@ -727,7 +729,11 @@ burger?.addEventListener('click', () => {
       }
       detailRefs.head.textContent = t(HEADING);
       detailRefs.media.style.backgroundImage = item.preview || item.media || '';
-      detailRefs.tt.textContent = t(item.title);
+      if (item.logo) {
+        detailRefs.tt.innerHTML = '<img src="' + item.logo + '" alt="' + t(item.title) + '">';
+      } else {
+        detailRefs.tt.textContent = t(item.title);
+      }
       detailRefs.sb.textContent = t(item.text);
 
       detailRefs.cta.href = item.url || '#';
