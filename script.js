@@ -468,14 +468,14 @@ burger?.addEventListener('click', () => {
       {
         title:   { es: 'Mies AR', en: 'Mies AR' },
         eyebrow: { es: 'SOFTWARE · REALIDAD MIXTA (AR)', en: 'SOFTWARE · MIXED REALITY (AR)' },
-        text:    { es: 'Aplicación web de realidad mixta para MiesGroup. Coloca y manipula modelos 3D sobre el mundo real desde el navegador del móvil, sin apps ni instalación, con solo un enlace. Construida con WebXR y Three.js.',
-                   en: 'Mixed-reality web app for MiesGroup. Place and manipulate 3D models over the real world from your mobile browser — no app, no install, just a link. Built with WebXR and Three.js.' },
+        text:    { es: 'Software de realidad mixta para MiesGroup. Coloca y manipula modelos 3D sobre el mundo real desde el navegador del móvil, sin apps ni instalación, con solo un enlace. Construido con WebXR y Three.js.',
+                   en: 'Mixed-reality software for MiesGroup. Place and manipulate 3D models over the real world from your mobile browser — no app, no install, just a link. Built with WebXR and Three.js.' },
         sub:     { es: 'Realidad mixta · WebXR', en: 'Mixed reality · WebXR' },
         cta:     { es: 'Ver demo', en: 'View demo' },
         media:   'url("assets/Software/MiesAR/MiesAR_Card.jpg")',
         bg:      BG.miesar,
         accent:  '#2fb37a',
-        site:    '#',   // TODO: URL del demo de Mies AR
+        site:    'https://jeremyh00.github.io/AR-MIES-WEB/',
       },
       {
         title:   { es: 'Próximamente', en: 'Coming soon' },
