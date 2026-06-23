@@ -846,8 +846,8 @@ burger?.addEventListener('click', () => {
     if (action.includes('XXXX') || !action.startsWith('http')) {
       status.className = 'cform__status is-error';
       status.textContent = lng() === 'en'
-        ? 'Form not configured yet.'
-        : 'El formulario aún no está configurado.';
+        ? 'The form will be available soon. For now, reach us on WhatsApp.'
+        : 'El formulario estará disponible pronto. Por ahora, escríbenos por WhatsApp.';
       return;
     }
     status.className = 'cform__status';
