@@ -4,6 +4,7 @@
 # Imágenes fuente sin optimizar (se suben las versiones .jpg)
 *.tiff
 *.tif
+assets/Software/MiesAR/MIESARCARD.png
 
 # OS
 Thumbs.db

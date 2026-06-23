@@ -403,6 +403,7 @@ burger?.addEventListener('click', () => {
     tour:    'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(122,196,198,.5), transparent 60%), linear-gradient(135deg,#0a1418,#0e2228 45%,#08171f)',
     reserva: 'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(96,160,190,.5), transparent 60%), linear-gradient(135deg,#0a131a,#0d2030 45%,#081420)',
     righttalent: 'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(58,166,224,.45), transparent 60%), linear-gradient(135deg,#08131a,#0d2230 45%,#07151f)',
+    miesar:  'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(47,179,122,.45), transparent 60%), linear-gradient(135deg,#08160f,#0d2618 45%,#07150d)',
     soonSW:  'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(80,150,150,.38), transparent 60%), linear-gradient(135deg,#091215,#0b1a1d 45%,#06141a)',
     cubexus: 'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(176,107,255,.5), transparent 60%), linear-gradient(135deg,#100a1a,#1c0f30 45%,#120822)',
     proto:   'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(224,90,170,.45), transparent 60%), linear-gradient(135deg,#170a14,#2a0d24 45%,#160819)',
@@ -463,6 +464,18 @@ burger?.addEventListener('click', () => {
         bg:      BG.righttalent,
         accent:  '#3aa6e0',
         site:    'https://rtproservices.co',
+      },
+      {
+        title:   { es: 'Mies AR', en: 'Mies AR' },
+        eyebrow: { es: 'SOFTWARE · REALIDAD MIXTA (AR)', en: 'SOFTWARE · MIXED REALITY (AR)' },
+        text:    { es: 'Aplicación web de realidad mixta para MiesGroup. Coloca y manipula modelos 3D sobre el mundo real desde el navegador del móvil, sin apps ni instalación, con solo un enlace. Construida con WebXR y Three.js.',
+                   en: 'Mixed-reality web app for MiesGroup. Place and manipulate 3D models over the real world from your mobile browser — no app, no install, just a link. Built with WebXR and Three.js.' },
+        sub:     { es: 'Realidad mixta · WebXR', en: 'Mixed reality · WebXR' },
+        cta:     { es: 'Ver demo', en: 'View demo' },
+        media:   'url("assets/Software/MiesAR/MiesAR_Card.jpg")',
+        bg:      BG.miesar,
+        accent:  '#2fb37a',
+        site:    '#',   // TODO: URL del demo de Mies AR
       },
       {
         title:   { es: 'Próximamente', en: 'Coming soon' },
