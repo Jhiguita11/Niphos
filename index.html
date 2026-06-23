@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="NIPHOS — Casa desarrolladora de Nexarq 360 y videojuegos como Cubexus. Construimos mundos, reales y virtuales." />
+  <title>NIPHOS — Construimos mundos</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=37" />
+</head>
+<body>
+  <!-- PRELOADER -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__core">
+      <svg class="preloader__ring" viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="preloader__track" cx="60" cy="60" r="54" />
+        <circle class="preloader__progress" cx="60" cy="60" r="54" />
+      </svg>
+      <img src="assets/LogoSinFondo.png" alt="NIPHOS" class="preloader__logo" />
+    </div>
+  </div>
+
+  <!-- Aurora glacial en movimiento -->
+  <div class="aurora" aria-hidden="true">
+    <span class="aurora__band aurora__band--1"></span>
+    <span class="aurora__band aurora__band--2"></span>
+    <span class="aurora__band aurora__band--3"></span>
+  </div>
+  <!-- Fondo de partículas glaciales -->
+  <canvas id="particles" aria-hidden="true"></canvas>
+  <!-- Resplandor radial detrás del logo -->
+  <div class="glow" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- SELECTOR DE IDIOMA -->
+  <div class="lang" id="lang" role="group" aria-label="Idioma / Language">
+    <button class="lang__btn" data-lang="es" type="button">ES</button>
+    <span class="lang__sep" aria-hidden="true">/</span>
+    <button class="lang__btn" data-lang="en" type="button">EN</button>
+  </div>
+
+  <!-- NAVEGACIÓN: pestañas orbitando el logo -->
+  <button class="burger" id="burger" aria-label="Menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="orbit" id="nav" aria-label="Principal">
+    <a href="#software" class="orbit__item orbit__item--tl"><span class="orbit__txt" data-es="Software" data-en="Software">Software</span><span class="orbit__dot"></span></a>
+    <a href="#videojuegos" class="orbit__item orbit__item--tr"><span class="orbit__dot"></span><span class="orbit__txt" data-es="Videojuegos" data-en="Games">Videojuegos</span></a>
+    <a href="#estudio" class="orbit__item orbit__item--bl"><span class="orbit__txt" data-es="Estudio" data-en="Studio">Estudio</span><span class="orbit__dot"></span></a>
+    <a href="#contacto" class="orbit__item orbit__item--br"><span class="orbit__dot"></span><span class="orbit__txt" data-es="Contacto" data-en="Contact">Contacto</span></a>
+  </nav>
+
+  <!-- HERO -->
+  <main class="hero" id="hero">
+    <!-- Efecto "dos caminos": Software / Videojuegos -->
+    <div class="hero__split" aria-hidden="true">
+      <div class="hero__half hero__half--soft"></div>
+      <div class="hero__half hero__half--game"></div>
+    </div>
+
+    <div class="hero__inner">
+      <div class="hero__logo reveal" data-delay="0">
+        <img src="assets/LogoSinFondo.png" alt="NIPHOS" class="hero__logo-img" />
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- DESTELLO de transición (fogonazo en el punto de convergencia) -->
+  <div class="flash" id="flash" aria-hidden="true"></div>
+
+  <!-- SECCIONES (reveladas tras la transición) -->
+  <div class="views" id="views" aria-hidden="true">
+    <section class="view view--showcase show--soft" data-view="software">
+      <div class="show__bg" aria-hidden="true"></div>
+      <div class="show__scrim" aria-hidden="true"></div>
+
+      <button class="view__back show__back" type="button" aria-label="Volver" data-es-aria="Volver" data-en-aria="Back">
+        <span class="view__back-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+        <span class="view__back-txt" data-es="Volver" data-en="Back">Volver</span>
+      </button>
+
+      <div class="show__content">
+        <span class="show__eyebrow"></span>
+        <h2 class="show__title"></h2>
+        <p class="show__text"></p>
+        <a class="show__cta" href="#"></a>
+      </div>
+
+      <div class="show__cards"></div>
+
+      <div class="show__nav">
+        <div class="show__dots" role="tablist" aria-label="Proyectos" data-es-aria="Proyectos" data-en-aria="Projects"></div>
+        <div class="show__nav-row">
+          <button class="show__navbtn show__navbtn--prev" type="button" aria-label="Proyecto anterior" data-es-aria="Proyecto anterior" data-en-aria="Previous project">
+            <svg class="show__arrow-ic" viewBox="0 0 38 16" fill="none" aria-hidden="true"><path d="M2 8 H35 M27 2 L35 8 L27 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="show__navlabel" data-es="ANTERIOR" data-en="PREVIOUS">ANTERIOR</span>
+          </button>
+          <button class="show__navbtn show__navbtn--next" type="button" aria-label="Proyecto siguiente" data-es-aria="Proyecto siguiente" data-en-aria="Next project">
+            <span class="show__navlabel" data-es="SIGUIENTE" data-en="NEXT">SIGUIENTE</span>
+            <svg class="show__arrow-ic" viewBox="0 0 38 16" fill="none" aria-hidden="true"><path d="M2 8 H35 M27 2 L35 8 L27 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="show__detail" aria-hidden="true"></div>
+    </section>
+
+    <section class="view view--showcase show--game" data-view="videojuegos">
+      <div class="show__bg" aria-hidden="true"></div>
+      <div class="show__scrim" aria-hidden="true"></div>
+
+      <button class="view__back show__back" type="button" aria-label="Volver" data-es-aria="Volver" data-en-aria="Back">
+        <span class="view__back-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+        <span class="view__back-txt" data-es="Volver" data-en="Back">Volver</span>
+      </button>
+
+      <div class="show__content">
+        <span class="show__eyebrow"></span>
+        <h2 class="show__title"></h2>
+        <p class="show__text"></p>
+        <a class="show__cta" href="#"></a>
+      </div>
+
+      <div class="show__cards"></div>
+
+      <div class="show__nav">
+        <div class="show__dots" role="tablist" aria-label="Proyectos" data-es-aria="Proyectos" data-en-aria="Projects"></div>
+        <div class="show__nav-row">
+          <button class="show__navbtn show__navbtn--prev" type="button" aria-label="Proyecto anterior" data-es-aria="Proyecto anterior" data-en-aria="Previous project">
+            <svg class="show__arrow-ic" viewBox="0 0 38 16" fill="none" aria-hidden="true"><path d="M2 8 H35 M27 2 L35 8 L27 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="show__navlabel" data-es="ANTERIOR" data-en="PREVIOUS">ANTERIOR</span>
+          </button>
+          <button class="show__navbtn show__navbtn--next" type="button" aria-label="Proyecto siguiente" data-es-aria="Proyecto siguiente" data-en-aria="Next project">
+            <span class="show__navlabel" data-es="SIGUIENTE" data-en="NEXT">SIGUIENTE</span>
+            <svg class="show__arrow-ic" viewBox="0 0 38 16" fill="none" aria-hidden="true"><path d="M2 8 H35 M27 2 L35 8 L27 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="show__detail" aria-hidden="true"></div>
+    </section>
+
+    <section class="view" data-view="estudio">
+      <span class="view__eyebrow" data-es="ESTUDIO" data-en="STUDIO">ESTUDIO</span>
+      <h2 class="view__title" data-es="Estudio" data-en="Studio">Estudio</h2>
+      <p class="view__text" data-es="Quiénes somos en NIPHOS. Sección en construcción." data-en="Who we are at NIPHOS. Section under construction.">Quiénes somos en NIPHOS. Sección en construcción.</p>
+      <button class="view__back" type="button" aria-label="Volver" data-es-aria="Volver" data-en-aria="Back">
+        <span class="view__back-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+        <span class="view__back-txt" data-es="Volver" data-en="Back">Volver</span>
+      </button>
+    </section>
+
+    <section class="view" data-view="contacto">
+      <span class="view__eyebrow" data-es="CONTACTO" data-en="CONTACT">CONTACTO</span>
+      <h2 class="view__title" data-es="Contacto" data-en="Contact">Contacto</h2>
+      <p class="view__text" data-es="Hablemos. Sección en construcción." data-en="Let's talk. Section under construction.">Hablemos. Sección en construcción.</p>
+      <button class="view__back" type="button" aria-label="Volver" data-es-aria="Volver" data-en-aria="Back">
+        <span class="view__back-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+        <span class="view__back-txt" data-es="Volver" data-en="Back">Volver</span>
+      </button>
+    </section>
+  </div>
+
+  <script src="script.js?v=40"></script>
+</body>
+</html>
