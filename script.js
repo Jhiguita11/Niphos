@@ -803,6 +803,8 @@ burger?.addEventListener('click', () => {
     function render() { if (mode === 'detail') renderDetail(); else renderRoot(); }
 
     const go = (dir) => { active = (active + dir + stack.length) % stack.length; render(); };
+    view.querySelector('.show__navbtn--next')?.addEventListener('click', () => go(1));
+    view.querySelector('.show__navbtn--prev')?.addEventListener('click', () => go(-1));
 
     // deslizar con el dedo sobre la baraja
     let touchX = null;
