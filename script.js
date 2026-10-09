@@ -394,8 +394,10 @@ burger?.addEventListener('click', () => {
   const lang = () => (document.documentElement.lang === 'en' ? 'en' : 'es');
   const t = (o) => (o ? (o[lang()] || o.es || '') : '');
 
-  const PLAY = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
   const ARROW = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+
+  const LINK_IC = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg>';
+  const DRILL_IC = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>';
 
   // gradientes de fondo de sección reutilizables
   const BG = {
@@ -404,9 +406,10 @@ burger?.addEventListener('click', () => {
     reserva: 'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(96,160,190,.5), transparent 60%), linear-gradient(135deg,#0a131a,#0d2030 45%,#081420)',
     righttalent: 'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(58,166,224,.45), transparent 60%), linear-gradient(135deg,#08131a,#0d2230 45%,#07151f)',
     miesar:  'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(47,179,122,.45), transparent 60%), linear-gradient(135deg,#08160f,#0d2618 45%,#07150d)',
+    workandtrip: 'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(237,35,54,.38), transparent 60%), linear-gradient(135deg,#050f1f,#071b36 45%,#040d1c)',
     soonSW:  'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(80,150,150,.38), transparent 60%), linear-gradient(135deg,#091215,#0b1a1d 45%,#06141a)',
-    cubexus: 'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(176,107,255,.5), transparent 60%), linear-gradient(135deg,#100a1a,#1c0f30 45%,#120822)',
-    proto:   'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(224,90,170,.45), transparent 60%), linear-gradient(135deg,#170a14,#2a0d24 45%,#160819)',
+    cubexus: 'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(230,48,48,.48), transparent 60%), linear-gradient(135deg,#1a0808,#2e0c0c 45%,#1c0606)',
+    fisica:  'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(40,110,240,.5), transparent 60%), linear-gradient(135deg,#060c1c,#0a1a3e 45%,#060f26)',
     soonGM:  'radial-gradient(ellipse 75% 80% at 76% 16%, rgba(90,120,224,.42), transparent 60%), linear-gradient(135deg,#080a18,#0d1230 45%,#070920)',
   };
 
@@ -475,7 +478,19 @@ burger?.addEventListener('click', () => {
         media:   'url("assets/Software/MiesAR/MiesAR_Card.jpg")',
         bg:      BG.miesar,
         accent:  '#2fb37a',
-        site:    'https://jeremyh00.github.io/AR-MIES-WEB/',
+        site:    'https://miesgroup3d.github.io/MIES-AR/',
+      },
+      {
+        title:   { es: 'Work&Trip USA', en: 'Work&Trip USA' },
+        eyebrow: { es: 'SOFTWARE · SITIO WEB', en: 'SOFTWARE · WEBSITE' },
+        text:    { es: 'Sitio web para Work&Trip USA, agencia que conecta a estudiantes y jóvenes profesionales con programas de intercambio y trabajo en Estados Unidos: Work & Travel, J-1, Trainee y Summer Camp. Comparador de programas, testimonios, preguntas frecuentes y formulario de aplicación, en español e inglés.',
+                   en: 'Website for Work&Trip USA, an agency connecting students and young professionals with exchange and work programs in the United States: Work & Travel, J-1, Trainee and Summer Camp. Program comparison, testimonials, FAQ and application form, in Spanish and English.' },
+        sub:     { es: 'Sitio web · Intercambios', en: 'Website · Exchange programs' },
+        cta:     { es: 'Ir al sitio web', en: 'Go to website' },
+        media:   'url("assets/Software/WorkAndTrip/WorkAndTrip_Card.jpg"), linear-gradient(160deg,#ed2336,#0b2a55 45%,#071b36)',
+        bg:      BG.workandtrip,
+        accent:  '#ed2336',
+        site:    'https://workandtrip.us',
       },
       {
         title:   { es: 'Próximamente', en: 'Coming soon' },
@@ -487,34 +502,35 @@ burger?.addEventListener('click', () => {
         bg:      BG.soonSW,
         accent:  '#5fb0a6',
         placeholder: true,
+        soon:    true,
       },
     ],
     videojuegos: [
       {
+        title:   { es: 'Física Inmersiva', en: 'Immersive Physics' },
+        eyebrow: { es: 'VIDEOJUEGOS · REALIDAD VIRTUAL', en: 'GAMES · VIRTUAL REALITY' },
+        text:    { es: 'Experiencia inmersiva en realidad virtual para aprender física jugando, pensada para niños desde los 10 años hasta mayores de 18. Desarrollada por los creadores de NIPHOS en la Universidad de Manizales como proyecto de grado y semillero de investigación.',
+                   en: 'An immersive virtual-reality experience to learn physics through play, designed for ages 10 to 18+. Built by the founders of NIPHOS at the University of Manizales as a thesis and research-group project.' },
+        sub:     { es: 'Realidad virtual · Terminado', en: 'Virtual reality · Completed' },
+        media:   'url("assets/Games/FisicaInmersiva/FisicaInmersiva_Card.jpg")',
+        bg:      BG.fisica,
+        accent:  '#2f7bff',
+      },
+      {
         title:   { es: 'Cubexus', en: 'Cubexus' },
-        eyebrow: { es: 'VIDEOJUEGOS · NIPHOS STUDIO', en: 'GAMES · NIPHOS STUDIO' },
-        text:    { es: 'Universos de juego que se sienten reales. Construimos mundos donde cada bloque cuenta una historia.',
-                   en: 'Game worlds that feel real. We build worlds where every block tells a story.' },
-        sub:     { es: 'En desarrollo', en: 'In development' },
-        media:   'linear-gradient(160deg,#6b3fb0,#1a0d2a)',
+        eyebrow: { es: 'VIDEOJUEGOS · AVENTURA ESPACIAL', en: 'GAMES · SPACE ADVENTURE' },
+        text:    { es: 'Un cubo que nunca se detiene y un universo lleno de estrellas. Controla cada giro, esquiva obstáculos y traza la ruta perfecta a través de 5 galaxias y 50 niveles, o lleva tus reflejos al límite en el modo infinito. Personaliza tu cubo con diseños, colores, estelas y efectos. Gira, esquiva y alcanza las estrellas. Llega en enero de 2027 a Google Play y App Store.',
+                   en: 'A cube that never stops and a universe full of stars. Control every turn, dodge obstacles and find the perfect route across 5 galaxies and 50 levels, or push your reflexes to the limit in endless mode. Customize your cube with designs, colors, trails and effects. Spin, dodge and reach the stars. Coming January 2027 to Google Play and the App Store.' },
+        sub:     { es: 'Enero 2027 · Android e iOS', en: 'January 2027 · Android & iOS' },
+        cta:     { es: 'Lanzamiento · Enero 2027', en: 'Launching · January 2027' },
+        media:   'url("assets/Games/Cubexus/Cubexus_Card.jpg"), linear-gradient(160deg,#e63030,#7a1010 45%,#2a0606)',
         bg:      BG.cubexus,
-        accent:  '#b06bff',
+        accent:  '#e63030',
         placeholder: true,
       },
       {
-        title:   { es: 'Prototipo', en: 'Prototype' },
-        eyebrow: { es: 'NIPHOS STUDIO · PRÓXIMAMENTE', en: 'NIPHOS STUDIO · COMING SOON' },
-        text:    { es: 'Un prototipo en cocción. Mecánicas nuevas, mundo nuevo. Pronto contaremos más.',
-                   en: 'A prototype in the works. New mechanics, new world. More to come soon.' },
-        sub:     { es: 'Próximamente', en: 'Coming soon' },
-        media:   'linear-gradient(160deg,#e05aaa,#7a1f5a 45%,#2a0d24)',
-        bg:      BG.proto,
-        accent:  '#e05aaa',
-        placeholder: true,
-      },
-      {
-        title:   { es: 'Nuevo mundo', en: 'New world' },
-        eyebrow: { es: 'NIPHOS STUDIO · PRÓXIMAMENTE', en: 'NIPHOS STUDIO · COMING SOON' },
+        title:   { es: 'Próximamente', en: 'Coming soon' },
+        eyebrow: { es: 'VIDEOJUEGOS · PRÓXIMAMENTE', en: 'GAMES · COMING SOON' },
         text:    { es: 'El próximo universo NIPHOS aún no tiene nombre. Pero ya lo estamos imaginando.',
                    en: 'The next NIPHOS universe has no name yet. But we’re already imagining it.' },
         sub:     { es: 'Próximamente', en: 'Coming soon' },
@@ -522,6 +538,7 @@ burger?.addEventListener('click', () => {
         bg:      BG.soonGM,
         accent:  '#5a78e0',
         placeholder: true,
+        soon:    true,
       },
     ],
   };
@@ -584,25 +601,32 @@ burger?.addEventListener('click', () => {
         media.style.backgroundImage = item.media || '';
         el.appendChild(media);
 
-        if (!item.placeholder) {
+        if (item.accent) el.style.setProperty('--ac', item.accent);
+
+        // tarjeta "Próximamente": logo + texto en lugar de una portada vacía
+        if (item.soon) {
+          el.classList.add('scard--soon');
+          const soon = document.createElement('div');
+          soon.className = 'scard__soon';
+          soon.innerHTML = '<img src="assets/LogoSinFondo.png" alt="" aria-hidden="true">'
+            + '<span class="scard__soon-txt"></span>';
+          el.appendChild(soon);
+        }
+
+        // ícono según lo que hace la tarjeta: subproyectos o sitio externo
+        const hasChildren = Array.isArray(item.children) && item.children.length > 0;
+        const url = item.site || item.url;
+        if (hasChildren || (url && url !== '#')) {
           const badge = document.createElement('span');
           badge.className = 'scard__badge';
-          badge.innerHTML = PLAY;
+          badge.innerHTML = hasChildren ? DRILL_IC : LINK_IC;
           el.appendChild(badge);
         }
 
-        const meta = document.createElement('div');
-        meta.className = 'scard__meta';
-        const name = document.createElement('span');
-        name.className = 'scard__name';
-        const sub = document.createElement('span');
-        sub.className = 'scard__sub';
-        meta.append(name, sub);
-        el.appendChild(meta);
 
         el.addEventListener('click', () => { if (i !== active) { active = i; render(); } });
         cardsWrap.appendChild(el);
-        return { el, name, sub };
+        return { el };
       });
 
       dots = stack.map((item, i) => {
@@ -620,7 +644,12 @@ burger?.addEventListener('click', () => {
       const item = stack[active];
       if (item.accent) view.style.setProperty('--vc', item.accent);
       if (eyebrow) eyebrow.textContent = t(item.eyebrow);
-      if (title) title.textContent = t(item.title);
+      if (title) {
+        title.textContent = t(item.title);
+        // la palabra más larga define el tamaño, para que nunca se meta bajo las tarjetas
+        const longest = Math.max(...t(item.title).split(/\s+/).map((w) => w.length));
+        title.style.setProperty('--chars', Math.max(longest, 6));
+      }
       if (text) text.textContent = t(item.text);
       if (item.bg) setBg(item.bg);
 
@@ -652,8 +681,6 @@ burger?.addEventListener('click', () => {
 
       cards.forEach((c, i) => {
         const it = stack[i];
-        c.name.textContent = t(it.title);
-        c.sub.textContent = t(it.sub);
         let rank = i - active;
         if (rank < 0) rank += stack.length;
         c.el.style.setProperty('--rank', rank);
@@ -663,6 +690,9 @@ burger?.addEventListener('click', () => {
       });
 
       dots.forEach((d, i) => d.classList.toggle('is-active', i === active));
+      cardsWrap.querySelectorAll('.scard__soon-txt').forEach((el) => {
+        el.textContent = lang() === 'en' ? 'Coming soon' : 'Próximamente';
+      });
     }
 
     /* ---------- sub-nivel: lista + preview grande ---------- */
@@ -714,7 +744,7 @@ burger?.addEventListener('click', () => {
       media.className = 'detail__media';
       const badge = document.createElement('span');
       badge.className = 'detail__badge';
-      badge.innerHTML = PLAY;
+      badge.innerHTML = LINK_IC;
       const ov = document.createElement('div');
       ov.className = 'detail__overlay';
       const tt = document.createElement('h3');
@@ -773,8 +803,16 @@ burger?.addEventListener('click', () => {
     function render() { if (mode === 'detail') renderDetail(); else renderRoot(); }
 
     const go = (dir) => { active = (active + dir + stack.length) % stack.length; render(); };
-    view.querySelector('.show__navbtn--next')?.addEventListener('click', () => go(1));
-    view.querySelector('.show__navbtn--prev')?.addEventListener('click', () => go(-1));
+
+    // deslizar con el dedo sobre la baraja
+    let touchX = null;
+    cardsWrap.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    cardsWrap.addEventListener('touchend', (e) => {
+      if (touchX === null) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      touchX = null;
+      if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+    });
 
     // CTA: baja al sub-nivel si hay proyectos; si es un sitio web, deja que el enlace abra
     cta?.addEventListener('click', (e) => {
@@ -815,26 +853,6 @@ burger?.addEventListener('click', () => {
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); go(1); }
       else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); go(-1); }
     });
-
-    // Videojuegos: cortina "Próximamente" sobre el contenido difuminado
-    if (view.dataset.view === 'videojuegos') {
-      view.classList.add('is-soon');
-      const soon = document.createElement('div');
-      soon.className = 'coming';
-      soon.innerHTML =
-        '<span class="coming__eyebrow">NIPHOS STUDIO</span>'
-        + '<h2 class="coming__title" data-es="Próximamente" data-en="Coming soon">Próximamente</h2>'
-        + '<span class="coming__line" aria-hidden="true"></span>'
-        + '<p class="coming__text" data-es="Estamos construyendo mundos. Nuestros videojuegos llegarán muy pronto."'
-        + ' data-en="We are building worlds. Our games are coming very soon.">'
-        + 'Estamos construyendo mundos. Nuestros videojuegos llegarán muy pronto.</p>';
-      view.appendChild(soon);
-      // aplica el idioma actual a los nodos recién creados
-      soon.querySelectorAll('[data-es]').forEach((el) => {
-        const v = el.getAttribute('data-' + lang());
-        if (v !== null) el.textContent = v;
-      });
-    }
 
     window.addEventListener('niphos:lang', render);
     build();
