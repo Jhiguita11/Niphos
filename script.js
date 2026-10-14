@@ -487,7 +487,7 @@ burger?.addEventListener('click', () => {
             logo:    'assets/Software/Nexarq/LogoValleAltoSinFondo.png',
             bg:      BG.tour,
             accent:  '#7ac4c6',
-            url:     'https://jhiguita11.github.io/NEXARQ/',
+            url:     'https://constructoramelendez.com/vallealtorecorridovr/',
           },
           {
             title:   { es: 'Reserva de Mirriñao', en: 'Reserva de Mirriñao' },
@@ -500,7 +500,7 @@ burger?.addEventListener('click', () => {
             logo:    'assets/Software/Nexarq/Logo%20vertical%20RSDM.png',
             bg:      BG.reserva,
             accent:  '#6aa6c8',
-            url:     'https://jhiguita11.github.io/Reserva_Mirrinao/',
+            url:     'https://constructoramelendez.com/reserva-mirrinao/',
           },
         ],
       },
