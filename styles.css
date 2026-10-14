@@ -2354,3 +2354,16 @@ body.returning .lang { animation: orbitIn 0.8s var(--ease) 0.25s both; }
   .show__cards { width: min(50vw, 200px, 28vh); }
   .show__text { -webkit-line-clamp: 3; }
 }
+
+/* texto accesible y para buscadores, oculto a la vista */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
