@@ -678,6 +678,19 @@ burger?.addEventListener('click', () => {
     }
     const backBtn = view.querySelector('.show__back');
 
+    // en móvil los indicadores van dentro del bloque de texto (encima del nombre);
+    // en computador vuelven a su lugar bajo la baraja
+    const navEl = view.querySelector('.show__nav');
+    const contentEl = view.querySelector('.show__content');
+    const mqMobile = window.matchMedia('(max-width: 820px)');
+    function placeNav() {
+      if (!navEl || !contentEl) return;
+      if (mqMobile.matches) contentEl.prepend(navEl);
+      else if (navEl.parentElement !== view) cardsWrap.after(navEl);
+    }
+    placeNav();
+    mqMobile.addEventListener('change', placeNav);
+
     let stack = root;      // arreglo de items que se muestran ahora
     let active = 0;
     let parentIndex = null; // null = nivel raíz; nº = índice del producto en el sub-nivel
@@ -1021,13 +1034,17 @@ burger?.addEventListener('click', () => {
     view.querySelector('.show__navbtn--prev')?.addEventListener('click', () => go(-1));
 
     // deslizar con el dedo sobre la baraja
-    let touchX = null;
-    cardsWrap.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
-    cardsWrap.addEventListener('touchend', (e) => {
-      if (touchX === null) return;
+    // en toda la sección, solo en la baraja (no en el detalle ni en la página de un juego)
+    let touchX = null, touchY = null;
+    view.addEventListener('touchstart', (e) => {
+      touchX = e.touches[0].clientX; touchY = e.touches[0].clientY;
+    }, { passive: true });
+    view.addEventListener('touchend', (e) => {
+      if (touchX === null || mode !== 'root' || pageItem) { touchX = null; return; }
       const dx = e.changedTouches[0].clientX - touchX;
+      const dy = e.changedTouches[0].clientY - touchY;
       touchX = null;
-      if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) go(dx < 0 ? 1 : -1);
     });
 
     // CTA: baja al sub-nivel si hay proyectos; si es un sitio web, deja que el enlace abra
