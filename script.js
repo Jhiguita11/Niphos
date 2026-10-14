@@ -2,13 +2,18 @@
    NIPHOS — Hero interacciones
    ============================================ */
 
-/* ---- 1. Preloader + reveal escalonado de entrada ---- */
+/* ---- 1. Splash "nace una estrella" + reveal escalonado de entrada ---- */
 (() => {
   const preloader = document.getElementById('preloader');
-  const progress = document.querySelector('.preloader__progress');
+  const logo = document.querySelector('.splash__logo');
   let done = false;
   let pageLoaded = false;
-  let ringDone = false;
+  let introDone = false;
+
+  // segunda visita en la misma sesión: splash corto
+  let seen = false;
+  try { seen = sessionStorage.getItem('niphos-splash') === '1'; sessionStorage.setItem('niphos-splash', '1'); } catch (e) {}
+  if (seen && preloader) preloader.classList.add('preloader--quick');
 
   function reveal() {
     document.body.classList.add('ready');
@@ -23,24 +28,31 @@
     done = true;
     if (preloader) {
       preloader.classList.add('preloader--hide');
-      setTimeout(() => { preloader.style.display = 'none'; }, 850);
+      setTimeout(() => { preloader.style.display = 'none'; }, 750);
     }
     reveal();
   }
 
-  // se cierra cuando el anillo terminó Y la página cargó
-  const maybeFinish = () => { if (ringDone && pageLoaded) finish(); };
+  // se cierra cuando el logo terminó de aparecer Y la página cargó
+  const maybeFinish = () => { if (introDone && pageLoaded) finish(); };
 
   window.addEventListener('load', () => { pageLoaded = true; maybeFinish(); });
-  if (progress) {
-    progress.addEventListener('animationend', () => { ringDone = true; maybeFinish(); });
+  if (logo) {
+    logo.addEventListener('animationend', () => { introDone = true; maybeFinish(); });
   } else {
-    ringDone = true;
+    introDone = true;
   }
 
-  // red de seguridad: nunca dejar la página atascada en el preloader
+  // red de seguridad: nunca dejar la página atascada en el splash
   setTimeout(finish, 4500);
 })();
+
+/* ---- 1b. Cargar imágenes pesadas después del primer pintado ---- */
+const whenLoaded = (fn) => {
+  const run = () => (window.requestIdleCallback ? requestIdleCallback(fn, { timeout: 800 }) : setTimeout(fn, 200));
+  if (document.readyState === 'complete') run();
+  else window.addEventListener('load', run, { once: true });
+};
 
 /* ---- 2. Menú móvil (pestañas orbitales -> overlay a pantalla completa) ---- */
 const nav = document.getElementById('nav');
@@ -52,7 +64,8 @@ burger?.addEventListener('click', () => {
 });
 /* ---- 2c. Transición al seleccionar pestaña (las partículas convergen y la escena se aleja) ---- */
 (() => {
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // en móvil la transición es directa (fundido corto) para que se sienta inmediata
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 820px)').matches;
   const views = document.getElementById('views');
   const flash = document.getElementById('flash');
   const items = document.querySelectorAll('.orbit__item');
@@ -142,6 +155,16 @@ burger?.addEventListener('click', () => {
   document.querySelectorAll('.view__back').forEach((b) =>
     b.addEventListener('click', goHome)
   );
+
+  // enlaces internos entre secciones (ej. Estudio → Software / Contacto)
+  document.querySelectorAll('[data-goto]').forEach((a) =>
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      showView(a.dataset.goto);
+      const v = views.querySelector('.view[data-view="' + a.dataset.goto + '"]');
+      if (v) v.scrollTop = 0;
+    })
+  );
 })();
 
 /* ---- 2b. Selector de idioma ES / EN ---- */
@@ -216,14 +239,24 @@ burger?.addEventListener('click', () => {
     diverge = { start: performance.now() };
     converge = null;
   });
-  window.addEventListener('niphos:reset', () => { converge = null; diverge = null; resize(); });
+  window.addEventListener('niphos:reset', () => { converge = null; diverge = null; particles = null; resize(); });
 
   function resize() {
+    // en móvil la barra del navegador cambia la altura al hacer scroll: solo regenerar si cambia el ancho
+    if (particles && window.innerWidth === w && Math.abs(window.innerHeight - h) < 160) return;
     w = canvas.width = window.innerWidth;
     h = canvas.height = window.innerHeight;
     const count = Math.min(160, Math.floor(w * h * DENSITY));
     particles = Array.from({ length: count }, makeParticle);
   }
+
+  // no dibujar mientras una sección tapa el fondo o la pestaña está oculta
+  const idle = () => document.hidden
+    || (document.body.classList.contains('view-open') && !converge && !diverge);
+  const wake = () => { if (!raf && !idle()) raf = requestAnimationFrame(tick); };
+  document.addEventListener('visibilitychange', wake);
+  new MutationObserver(wake).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  ['niphos:converge', 'niphos:diverge', 'niphos:reset'].forEach((ev) => window.addEventListener(ev, wake));
 
   function makeParticle() {
     return {
@@ -350,7 +383,7 @@ burger?.addEventListener('click', () => {
       }
     }
 
-    raf = requestAnimationFrame(tick);
+    raf = idle() ? 0 : requestAnimationFrame(tick);
   }
 
   window.addEventListener('resize', resize);
@@ -422,7 +455,7 @@ burger?.addEventListener('click', () => {
                    en: 'Immersive 360° tours for construction companies. Walk every project before it’s built, on screen or on Oculus Quest.' },
         sub:     { es: 'Recorridos 360° y VR', en: '360° & VR tours' },
         cta:     { es: 'Explorar proyectos', en: 'Explore projects' },
-        media:   'url("assets/Software/Nexarq/NexarqCard.png")',
+        media:   'url("assets/Software/Nexarq/NexarqCard.jpg")',
         logo:    'assets/Software/Nexarq/NexarqLogo.png',
         bg:      BG.nexarq,
         accent:  '#e0b860',
@@ -463,7 +496,7 @@ burger?.addEventListener('click', () => {
                    en: 'Web platform to find and connect hospitality staff for hotels. Hotel recruitment, made simple and fast.' },
         sub:     { es: 'Plataforma web', en: 'Web platform' },
         cta:     { es: 'Visitar sitio', en: 'Visit site' },
-        media:   'url("assets/Software/Right%20Talent/Right_Talent_Card.png")',
+        media:   'url("assets/Software/Right%20Talent/Right_Talent_Card.jpg")',
         bg:      BG.righttalent,
         accent:  '#3aa6e0',
         site:    'https://rtproservices.co',
@@ -475,7 +508,7 @@ burger?.addEventListener('click', () => {
                    en: 'Mixed-reality software for MiesGroup. Place and manipulate 3D models over the real world from your mobile browser — no app, no install, just a link. Built with WebXR and Three.js.' },
         sub:     { es: 'Realidad mixta · WebXR', en: 'Mixed reality · WebXR' },
         cta:     { es: 'Ir al sitio web', en: 'Go to website' },
-        media:   'url("assets/Software/MiesAR/MiesAR_Card.jpg")',
+        media:   'url("assets/Software/MiesAR/MiesAR_Card_hq.jpg")',
         bg:      BG.miesar,
         accent:  '#2fb37a',
         site:    'https://miesgroup3d.github.io/MIES-AR/',
@@ -515,6 +548,32 @@ burger?.addEventListener('click', () => {
         media:   'url("assets/Games/FisicaInmersiva/FisicaInmersiva_Card.jpg")',
         bg:      BG.fisica,
         accent:  '#2f7bff',
+        // página propia del juego (se abre con "Explorar")
+        page: {
+          cover:   'assets/Games/FisicaInmersiva/FisicaInmersiva_Card.jpg',
+          tagline: { es: 'Aprende física viviéndola.', en: 'Learn physics by living it.' },
+          facts: [
+            { k: { es: 'Plataforma', en: 'Platform' }, v: { es: 'Realidad virtual', en: 'Virtual reality' } },
+            { k: { es: 'Público', en: 'Audience' },    v: { es: 'De 10 a 18+ años', en: 'Ages 10 to 18+' } },
+            { k: { es: 'Estado', en: 'Status' },       v: { es: 'Terminado', en: 'Completed' } },
+            { k: { es: 'Origen', en: 'Origin' },       v: { es: 'Universidad de Manizales', en: 'University of Manizales' } },
+          ],
+          about: {
+            es: 'Física Inmersiva convierte los conceptos de la física en experiencias que se pueden ver y experimentar. En lugar de memorizar fórmulas, el jugador entra a un entorno de realidad virtual donde cada fenómeno cobra vida y se aprende jugando. Nació como proyecto de grado y semillero de investigación de los fundadores de NIPHOS en la Universidad de Manizales.',
+            en: 'Immersive Physics turns physics concepts into experiences you can see and explore. Instead of memorizing formulas, players step into a virtual-reality world where every phenomenon comes to life and is learned through play. It began as the thesis and research-group project of NIPHOS’s founders at the University of Manizales.',
+          },
+          features: [
+            { t: { es: 'Aprender en primera persona', en: 'First-person learning' },
+              d: { es: 'Los conceptos se exploran dentro de la realidad virtual, no en un tablero.', en: 'Concepts are explored inside virtual reality, not on a whiteboard.' } },
+            { t: { es: 'Para todas las edades', en: 'For all ages' },
+              d: { es: 'Diseñado para niños desde los 10 años hasta jóvenes y adultos.', en: 'Designed for kids from age 10 up to teens and adults.' } },
+            { t: { es: 'Aprender jugando', en: 'Learning through play' },
+              d: { es: 'Retos y dinámicas que hacen de la física algo divertido.', en: 'Challenges and mechanics that make physics fun.' } },
+            { t: { es: 'Respaldo académico', en: 'Academic backing' },
+              d: { es: 'Proyecto de grado y semillero de investigación en la Universidad de Manizales.', en: 'Thesis and research-group project at the University of Manizales.' } },
+          ],
+          // video: 'https://www.youtube.com/watch?v=...'  ← al tenerlo, aparece el botón "Ver video"
+        },
       },
       {
         title:   { es: 'Cubexus', en: 'Cubexus' },
@@ -522,11 +581,35 @@ burger?.addEventListener('click', () => {
         text:    { es: 'Un cubo que nunca se detiene y un universo lleno de estrellas. Controla cada giro, esquiva obstáculos y traza la ruta perfecta a través de 5 galaxias y 50 niveles, o lleva tus reflejos al límite en el modo infinito. Personaliza tu cubo con diseños, colores, estelas y efectos. Gira, esquiva y alcanza las estrellas. Llega en enero de 2027 a Google Play y App Store.',
                    en: 'A cube that never stops and a universe full of stars. Control every turn, dodge obstacles and find the perfect route across 5 galaxies and 50 levels, or push your reflexes to the limit in endless mode. Customize your cube with designs, colors, trails and effects. Spin, dodge and reach the stars. Coming January 2027 to Google Play and the App Store.' },
         sub:     { es: 'Enero 2027 · Android e iOS', en: 'January 2027 · Android & iOS' },
-        cta:     { es: 'Lanzamiento · Enero 2027', en: 'Launching · January 2027' },
         media:   'url("assets/Games/Cubexus/Cubexus_Card.jpg"), linear-gradient(160deg,#e63030,#7a1010 45%,#2a0606)',
         bg:      BG.cubexus,
         accent:  '#e63030',
         placeholder: true,
+        page: {
+          cover:   'assets/Games/Cubexus/Cubexus_Card.jpg',
+          tagline: { es: 'Gira, esquiva y alcanza las estrellas.', en: 'Spin, dodge and reach the stars.' },
+          facts: [
+            { k: { es: 'Plataformas', en: 'Platforms' }, v: { es: 'Android e iOS', en: 'Android & iOS' } },
+            { k: { es: 'Lanzamiento', en: 'Release' },   v: { es: 'Enero 2027', en: 'January 2027' } },
+            { k: { es: 'Género', en: 'Genre' },          v: { es: 'Habilidad y precisión', en: 'Skill & precision' } },
+            { k: { es: 'Contenido', en: 'Content' },     v: { es: '50 niveles + modo infinito', en: '50 levels + endless mode' } },
+          ],
+          about: {
+            es: 'Cubexus es un juego de habilidad y precisión en el que un cubo recorre el espacio en busca de estrellas. Nunca se detiene: tú controlas cada giro para esquivar obstáculos y encontrar la ruta perfecta.',
+            en: 'Cubexus is a skill and precision game where a cube travels through space in search of stars. It never stops: you control every turn to dodge obstacles and find the perfect route.',
+          },
+          features: [
+            { t: { es: '5 galaxias, 50 niveles', en: '5 galaxies, 50 levels' },
+              d: { es: 'Cada galaxia con sus propios retos y estrellas por conseguir.', en: 'Each galaxy with its own challenges and stars to collect.' } },
+            { t: { es: 'Modo infinito', en: 'Endless mode' },
+              d: { es: 'Lleva tus reflejos al límite y supera tu mejor marca.', en: 'Push your reflexes to the limit and beat your best score.' } },
+            { t: { es: 'Personaliza tu cubo', en: 'Customize your cube' },
+              d: { es: 'Desbloquea diseños, combina colores y agrega estelas y efectos.', en: 'Unlock designs, mix colors and add trails and effects.' } },
+            { t: { es: 'Control preciso', en: 'Precise control' },
+              d: { es: 'Un cubo que nunca se detiene: cada giro cuenta.', en: 'A cube that never stops: every turn counts.' } },
+          ],
+          note: { es: 'Llega en enero de 2027 a Google Play y App Store.', en: 'Coming January 2027 to Google Play and the App Store.' },
+        },
       },
       {
         title:   { es: 'Próximamente', en: 'Coming soon' },
@@ -598,7 +681,7 @@ burger?.addEventListener('click', () => {
 
         const media = document.createElement('div');
         media.className = 'scard__media';
-        media.style.backgroundImage = item.media || '';
+        whenLoaded(() => { media.style.backgroundImage = item.media || ''; });
         el.appendChild(media);
 
         if (item.accent) el.style.setProperty('--ac', item.accent);
@@ -608,7 +691,7 @@ burger?.addEventListener('click', () => {
           el.classList.add('scard--soon');
           const soon = document.createElement('div');
           soon.className = 'scard__soon';
-          soon.innerHTML = '<img src="assets/LogoSinFondo.png" alt="" aria-hidden="true">'
+          soon.innerHTML = '<img src="assets/LogoSinFondo.webp" alt="" aria-hidden="true" loading="lazy">'
             + '<span class="scard__soon-txt"></span>';
           el.appendChild(soon);
         }
@@ -655,10 +738,16 @@ burger?.addEventListener('click', () => {
 
       if (cta) {
         const canDrill = Array.isArray(item.children) && item.children.length > 0;
+        const hasPage = !!item.page;
         const url = item.site || item.url;
         const hasLink = url && url !== '#';
         let label;
-        if (canDrill) {
+        if (hasPage) {
+          cta.href = '#';
+          cta.removeAttribute('target');
+          cta.dataset.act = 'page';
+          label = t(item.cta) || (lang() === 'en' ? 'Explore' : 'Explorar');
+        } else if (canDrill) {
           cta.href = '#';
           cta.removeAttribute('target');
           cta.dataset.act = 'drill';
@@ -676,7 +765,7 @@ burger?.addEventListener('click', () => {
           label = t(item.cta) || (lang() === 'en' ? 'Explore' : 'Explorar');
         }
         cta.innerHTML = label + ' ' + ARROW;
-        cta.classList.toggle('is-disabled', !canDrill && !hasLink);
+        cta.classList.toggle('is-disabled', !hasPage && !canDrill && !hasLink);
       }
 
       cards.forEach((c, i) => {
@@ -799,6 +888,58 @@ burger?.addEventListener('click', () => {
     }
 
     /* ---------- despachadores ---------- */
+    /* ---------- página propia de un item (ej. cada videojuego) ---------- */
+    let pageItem = null;
+    const pageEl = document.createElement('div');
+    pageEl.className = 'gpage';
+    view.appendChild(pageEl);
+
+    function renderPage() {
+      if (!pageItem) return;
+      const it = pageItem, pg = it.page, en = lang() === 'en';
+      const esc = (str) => String(str).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+      const facts = (pg.facts || []).map((f) =>
+        '<div class="gpage__fact"><dt>' + esc(t(f.k)) + '</dt><dd>' + esc(t(f.v)) + '</dd></div>').join('');
+      const feats = (pg.features || []).map((f, i) =>
+        '<li class="gpage__feat"><span class="gpage__num">' + String(i + 1).padStart(2, '0') + '</span>'
+        + '<h4>' + esc(t(f.t)) + '</h4><p>' + esc(t(f.d)) + '</p></li>').join('');
+      const video = pg.video
+        ? '<a class="gpage__btn" href="' + esc(pg.video) + '" target="_blank" rel="noopener">' + (en ? 'Watch video' : 'Ver video') + ' ' + ARROW + '</a>'
+        : '';
+      pageEl.innerHTML =
+        '<div class="gpage__inner">'
+        + '<header class="gpage__hero">'
+        +   '<div class="gpage__cover"><img src="' + esc(pg.cover) + '" alt="' + esc(t(it.title)) + '"></div>'
+        +   '<div class="gpage__info">'
+        +     '<span class="gpage__eyebrow">' + esc(t(it.eyebrow)) + '</span>'
+        +     '<h2 class="gpage__title">' + esc(t(it.title)) + '</h2>'
+        +     '<p class="gpage__tagline">' + esc(t(pg.tagline)) + '</p>'
+        +     '<dl class="gpage__facts">' + facts + '</dl>'
+        +     (pg.note ? '<p class="gpage__note">' + esc(t(pg.note)) + '</p>' : '')
+        +     video
+        +   '</div>'
+        + '</header>'
+        + '<section class="gpage__section">'
+        +   '<h3 class="gpage__label">' + (en ? 'ABOUT THE GAME' : 'SOBRE EL JUEGO') + '</h3>'
+        +   '<p class="gpage__about">' + esc(t(pg.about)) + '</p>'
+        + '</section>'
+        + '<section class="gpage__section">'
+        +   '<h3 class="gpage__label">' + (en ? 'FEATURES' : 'CARACTERÍSTICAS') + '</h3>'
+        +   '<ul class="gpage__feats">' + feats + '</ul>'
+        + '</section>'
+        + '</div>';
+    }
+    function openPage(item) {
+      pageItem = item;
+      renderPage();
+      view.classList.add('is-page');
+      pageEl.scrollTop = 0;
+    }
+    function closePage() {
+      pageItem = null;
+      view.classList.remove('is-page');
+    }
+
     function build() { if (mode === 'detail') buildDetail(); else buildRoot(); }
     function render() { if (mode === 'detail') renderDetail(); else renderRoot(); }
 
@@ -819,7 +960,10 @@ burger?.addEventListener('click', () => {
     // CTA: baja al sub-nivel si hay proyectos; si es un sitio web, deja que el enlace abra
     cta?.addEventListener('click', (e) => {
       const item = stack[active];
-      if (Array.isArray(item.children) && item.children.length) {
+      if (item.page) {
+        e.preventDefault();
+        openPage(item);
+      } else if (Array.isArray(item.children) && item.children.length) {
         e.preventDefault();
         parentIndex = active;
         stack = item.children;
@@ -837,6 +981,11 @@ burger?.addEventListener('click', () => {
     // Volver: si estamos en sub-nivel, sube; si no, deja que se cierre la sección
     view.addEventListener('click', (e) => {
       if (!e.target.closest('.show__back')) return;
+      if (pageItem) {
+        e.stopPropagation();   // desde la página del juego vuelve a la baraja
+        closePage();
+        return;
+      }
       if (parentIndex !== null) {
         e.stopPropagation();   // evita que el handler global cierre la sección
         stack = root;
@@ -851,12 +1000,12 @@ burger?.addEventListener('click', () => {
 
     document.addEventListener('keydown', (e) => {
       if (!view.classList.contains('active')) return;
-      if (view.classList.contains('is-soon')) return;
+      if (view.classList.contains('is-soon') || pageItem) return;
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); go(1); }
       else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); go(-1); }
     });
 
-    window.addEventListener('niphos:lang', render);
+    window.addEventListener('niphos:lang', () => { render(); renderPage(); });
     build();
     render();
   });
