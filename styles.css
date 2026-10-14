@@ -52,8 +52,9 @@ body {
    → destello y chispas (0.8–1.25) → el logo surge de la luz (0.85–1.6) */
 .splash {
   position: absolute;
-  top: calc(50% + 44px);   /* centro del logo del inicio (queda 44px bajo el centro) */
-  left: 50%;
+  /* centro del logo del inicio (script.js calcula --lx/--ly/--lw/--lh) */
+  top: calc(var(--ly, 50vh) + var(--lh, 0px) / 2);
+  left: calc(var(--lx, 50vw) + var(--lw, 0px) / 2);
   width: 0;
   height: 0;
 }
@@ -157,9 +158,10 @@ body {
 
 /* el logo surge desde la luz */
 .splash__logo {
-  position: relative;
-  width: clamp(320px, 50vw, 560px);   /* mismo tamaño que el logo del inicio: el paso es continuo */
-  top: 44px;
+  position: absolute;
+  left: var(--lx, 50%);
+  top: var(--ly, 50%);
+  width: var(--lw, clamp(320px, 50vw, 560px));   /* mismo tamaño y lugar que el logo del inicio */
   height: auto;
   opacity: 0;
   animation: logoEmerge 0.75s cubic-bezier(.2, .7, .2, 1) 0.85s forwards;
@@ -2207,4 +2209,148 @@ body.returning .lang { animation: orbitIn 0.8s var(--ease) 0.25s both; }
 
   /* el contenido desplazable va en su propia capa */
   .view--showcase, .view--studio, .view--contact, .is-page .gpage { -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+}
+
+/* ============================================================
+   MÓVIL — rediseño (≤ 820px)
+   ============================================================ */
+.show__more, .dmob { display: none; }
+
+@media (max-width: 820px) {
+  /* ---------- Inicio: logo arriba y secciones visibles abajo (sin hamburguesa) ---------- */
+  .burger { display: none !important; }
+  .hero { padding: 90px 24px calc(300px + env(safe-area-inset-bottom)); min-height: 100svh; }
+  .hero__logo-img { width: min(62vw, 300px); }
+  .orbit {
+    position: fixed;
+    inset: auto 0 0 0;
+    padding: 0 28px calc(26px + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, #060708 55%, rgba(6, 7, 8, 0));
+    opacity: 1;
+    pointer-events: auto;
+    justify-content: flex-end;
+    z-index: 40;
+  }
+  .orbit__item { font-size: 21px; padding: 15px 0; }
+  .orbit__item::after {
+    content: '→';
+    order: 3;
+    margin-left: auto;
+    font-size: 16px;
+    color: var(--fg-dim);
+    transition: transform 0.3s var(--ease), color 0.3s var(--ease);
+  }
+  .orbit__item:active::after { transform: translateX(4px); color: var(--accent); }
+  body.ready .orbit__item { animation: menuIn 0.5s var(--ease) both; }
+  body.ready .orbit__item:nth-child(1) { animation-delay: 0.15s; }
+  body.ready .orbit__item:nth-child(2) { animation-delay: 0.22s; }
+  body.ready .orbit__item:nth-child(3) { animation-delay: 0.29s; }
+  body.ready .orbit__item:nth-child(4) { animation-delay: 0.36s; }
+  body:not(.ready) .orbit__item { opacity: 0; }
+  body.view-open .orbit { visibility: hidden; }
+
+  /* ---------- Barra superior fija en las secciones ---------- */
+  .view.active::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 74px;
+    z-index: 25;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(6, 7, 8, 0.94) 0%, rgba(6, 7, 8, 0.75) 55%, rgba(6, 7, 8, 0));
+  }
+  .view__back,
+  .show__back {
+    position: fixed;
+    top: calc(12px + env(safe-area-inset-top));
+    left: 14px;
+    z-index: 30;
+    height: 44px;
+  }
+  .view__back-ic { width: 44px; height: 44px; }
+  .show__bg { position: fixed; }
+
+  /* ---------- Software / Videojuegos: tarjeta → puntos → texto → botón ---------- */
+  .view--showcase { padding: 74px 22px 36px; gap: 0; }
+  .show__cards { width: min(56vw, 236px, 30vh); }
+  .scard {
+    transform:
+      translate(calc(var(--rank, 0) * 22px), calc(var(--rank, 0) * 16px))
+      scale(calc(1 - var(--rank, 0) * 0.06));
+  }
+  .show__nav { order: 2; margin-top: 30px; }
+  .show__content { order: 3; margin-top: 18px; display: flex; flex-direction: column; align-items: center; }
+  .show__eyebrow { margin-bottom: 10px; font-size: 10.5px; }
+  .show__title { margin-bottom: 14px; }
+  .show__text {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+  }
+  .show__text.is-open { -webkit-line-clamp: unset; display: block; }
+  .show__more {
+    display: inline-block;
+    background: none;
+    border: none;
+    padding: 6px 10px;
+    margin-bottom: 14px;
+    font: 500 13px 'Inter', sans-serif;
+    color: var(--vc);
+    cursor: pointer;
+  }
+  .show__more[hidden] { display: none; }
+  .show__cta { margin-top: 10px; padding: 14px 28px; }
+
+  /* ---------- Detalle de un producto (Nexarq): tarjetas apiladas ---------- */
+  .is-sub .show__detail { padding: 84px 20px 48px; }
+  .detail__list, .detail__preview { display: none !important; }
+  .dmob { display: flex; flex-direction: column; gap: 22px; }
+  .dmob__card {
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--vc) 30%, transparent);
+    background: rgba(255, 255, 255, 0.03);
+    text-align: left;
+  }
+  .dmob__media { aspect-ratio: 16 / 10; background-size: cover; background-position: center; }
+  .dmob__body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .dmob__title { font-family: 'Sora', sans-serif; font-weight: 600; font-size: 1.3rem; }
+  .dmob__title img { height: 46px; width: auto; display: block; }
+  .dmob__sub { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); }
+  .dmob__text { font-size: 14.5px; line-height: 1.6; color: var(--fg-dim); font-weight: 300; }
+  .dmob__cta {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    padding: 12px 22px;
+    border-radius: 100px;
+    text-decoration: none;
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: #06141a;
+    background: var(--vc);
+  }
+  .dmob__cta svg { width: 16px; height: 16px; }
+  .dmob__cta.is-disabled { opacity: 0.4; pointer-events: none; }
+  .detail__more { align-self: center; }
+
+  /* ---------- Contacto: menos espacio vacío ---------- */
+  .contact .view__text { margin-bottom: 24px; }
+  .contact__grid { gap: 26px; margin-top: 0; }
+}
+/* pantallas bajas (iPhone SE, etc.) */
+@media (max-width: 820px) and (max-height: 700px) {
+  .hero { padding-bottom: calc(270px + env(safe-area-inset-bottom)); }
+  .orbit__item { padding: 12px 0; font-size: 19px; }
+  .show__cards { width: min(50vw, 200px, 28vh); }
+  .show__text { -webkit-line-clamp: 3; }
 }

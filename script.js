@@ -10,6 +10,21 @@
   let pageLoaded = false;
   let introDone = false;
 
+  // ubica el splash sobre el logo del inicio (offset* ignora transformaciones de entrada)
+  const heroLogo = document.querySelector('.hero__logo-img');
+  function alignSplash() {
+    if (!heroLogo || !preloader) return;
+    let x = 0, y = 0, el = heroLogo;
+    while (el) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
+    preloader.style.setProperty('--lx', x + 'px');
+    preloader.style.setProperty('--ly', y - window.scrollY + 'px');
+    preloader.style.setProperty('--lw', heroLogo.offsetWidth + 'px');
+    preloader.style.setProperty('--lh', heroLogo.offsetHeight + 'px');
+  }
+  alignSplash();
+  if (heroLogo && !heroLogo.complete) heroLogo.addEventListener('load', alignSplash, { once: true });
+  window.addEventListener('resize', alignSplash);
+
   // segunda visita en la misma sesión: splash corto
   let seen = false;
   try { seen = sessionStorage.getItem('niphos-splash') === '1'; sessionStorage.setItem('niphos-splash', '1'); } catch (e) {}
@@ -637,6 +652,30 @@ burger?.addEventListener('click', () => {
     const cta = view.querySelector('.show__cta');
     const cardsWrap = view.querySelector('.show__cards');
     const dotsWrap = view.querySelector('.show__dots');
+
+    // botón "Ver más" (solo se ve en móvil cuando el texto está recortado)
+    let moreBtn = null;
+    function checkMore() {
+      if (!moreBtn || !text || text.classList.contains('is-open')) return;
+      moreBtn.hidden = text.scrollHeight <= text.clientHeight + 2;
+    }
+    if (text) {
+      moreBtn = document.createElement('button');
+      moreBtn.type = 'button';
+      moreBtn.className = 'show__more';
+      moreBtn.hidden = true;
+      text.after(moreBtn);
+      // se revisa al abrir la sección y al cambiar el tamaño (oculta, el texto no tiene altura)
+      new MutationObserver(() => { if (view.classList.contains('active')) requestAnimationFrame(checkMore); })
+        .observe(view, { attributes: true, attributeFilter: ['class'] });
+      window.addEventListener('resize', checkMore);
+      moreBtn.addEventListener('click', () => {
+        const open = text.classList.toggle('is-open');
+        moreBtn.textContent = open
+          ? (lang() === 'en' ? 'Read less' : 'Ver menos')
+          : (lang() === 'en' ? 'Read more' : 'Ver más');
+      });
+    }
     const backBtn = view.querySelector('.show__back');
 
     let stack = root;      // arreglo de items que se muestran ahora
@@ -733,7 +772,14 @@ burger?.addEventListener('click', () => {
         const longest = Math.max(...t(item.title).split(/\s+/).map((w) => w.length));
         title.style.setProperty('--chars', Math.max(longest, 6));
       }
-      if (text) text.textContent = t(item.text);
+      if (text) {
+        text.textContent = t(item.text);
+        text.classList.remove('is-open');
+        if (moreBtn) {
+          moreBtn.textContent = lang() === 'en' ? 'Read more' : 'Ver más';
+          requestAnimationFrame(checkMore);
+        }
+      }
       if (item.bg) setBg(item.bg);
 
       if (cta) {
@@ -825,7 +871,20 @@ burger?.addEventListener('click', () => {
       more.target = '_blank';
       more.rel = 'noopener';
       more.addEventListener('click', linkGuard);
-      left.append(eb, head, list, more);
+      // versión móvil: todas las tarjetas de proyecto una debajo de otra
+      const mob = document.createElement('div');
+      mob.className = 'dmob';
+      const mobItems = stack.map((it) => {
+        const c = document.createElement('article');
+        c.className = 'dmob__card';
+        c.innerHTML = '<div class="dmob__media"></div>'
+          + '<div class="dmob__body"><div class="dmob__title"></div><span class="dmob__sub"></span>'
+          + '<p class="dmob__text"></p><a class="dmob__cta" target="_blank" rel="noopener"></a></div>';
+        c.querySelector('.dmob__cta').addEventListener('click', linkGuard);
+        mob.appendChild(c);
+        return c;
+      });
+      left.append(eb, head, list, mob, more);
 
       const prev = document.createElement('div');
       prev.className = 'detail__preview';
@@ -849,7 +908,7 @@ burger?.addEventListener('click', () => {
       prev.append(media, badge, ov);
 
       detailWrap.append(left, prev);
-      detailRefs = { eb, head, items, media, tt, sb, cta: dcta, more };
+      detailRefs = { eb, head, items, media, tt, sb, cta: dcta, more, mobItems };
     }
 
     function renderDetail() {
@@ -879,6 +938,20 @@ burger?.addEventListener('click', () => {
 
       detailRefs.more.href = (product && product.site) || '#';
       detailRefs.more.innerHTML = t(MORE) + ' ' + ARROW;
+
+      detailRefs.mobItems.forEach((c, i) => {
+        const it = stack[i];
+        c.style.setProperty('--vc', it.accent || '');
+        c.querySelector('.dmob__media').style.backgroundImage = it.preview || it.media || '';
+        // en móvil el nombre va en texto: algunos logos son oscuros y no se leen sobre el fondo
+        c.querySelector('.dmob__title').textContent = t(it.title);
+        c.querySelector('.dmob__sub').textContent = t(it.sub);
+        c.querySelector('.dmob__text').textContent = t(it.text);
+        const a = c.querySelector('.dmob__cta');
+        a.href = it.url || '#';
+        a.innerHTML = (t(it.cta) || t(TOUR)) + ' ' + ARROW;
+        a.classList.toggle('is-disabled', !it.url || it.url === '#');
+      });
 
       detailRefs.items.forEach((it, i) => {
         it.name.textContent = t(stack[i].title);
